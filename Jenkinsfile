@@ -1,8 +1,4 @@
 node(){
-    triggers {
-        pollSCM('* * * * *')
-    }
-   
     stage('Cloning Git') {
         checkout scm
     } 
