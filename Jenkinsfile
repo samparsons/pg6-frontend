@@ -15,8 +15,10 @@ pipeline {
         
         stage('NPM build') {
             steps {
-                echo '----------------- This is a build phase ----------'
-                sh 'npm run build'
+                nodejs('nodejs') {
+                    echo '----------------- This is a build phase ----------'
+                    sh 'npm run build'
+                }
             }
         }
         
