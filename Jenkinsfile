@@ -8,8 +8,10 @@ pipeline {
         
         stage('NPM install') {
             steps {
-                echo '----------------- This is a install phase ----------'
-                sh 'npm install'
+                nodejs('nodejs') {
+                    echo '----------------- This is a install phase ----------'
+                    sh 'npm install'
+                }
             }
         }
         
