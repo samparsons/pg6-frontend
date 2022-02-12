@@ -1,8 +1,8 @@
-pipeline(){
-    agent any 
+node(){
     triggers {
         pollSCM('* * * * *')
     }
+   
     stage('Cloning Git') {
         checkout scm
     } 
@@ -20,7 +20,7 @@ pipeline(){
         }
         
     }
-   stage('Docker Build') {
+    stage('Docker Build') {
             steps {
                 echo '----------------- This is a build docker image phase ----------'
                 sh '''
