@@ -1,22 +1,28 @@
-node(){
-    stage('Cloning Git') {
-        checkout scm
-    } 
-    stage('Install dependencies') {
-        nodejs('nodejs') {
-            sh 'npm install'
-            echo "Modules installed"
-        }
-    }
+pipeline {
+    agent any 
 
-    stage('Build') {
-        nodejs('nodejs') {
-            sh 'npm run build'
-            echo "Build completed"
+    triggers {
+        pollSCM('* * * * *')
+    }
+    stages {
+        
+        stage('NPM install') {
+            steps {
+                echo '----------------- This is a install phase ----------'
+                sh 'npm install'
+            }
         }
         
-    }
-    stage('Docker Build') {
+        stage('NPM build') {
+            steps {
+                echo '----------------- This is a build phase ----------'
+                sh 'npm run build'
+            }
+        }
+        
+        
+
+        stage('Docker Build') {
             steps {
                 echo '----------------- This is a build docker image phase ----------'
                 sh '''
@@ -25,18 +31,19 @@ node(){
             }
         }
 
-    stage('Docker Deploy') {
-        steps {
-            echo '----------------- This is a docker deploment phase ----------'
-            sh '''
-                (if  [ $(docker ps -a | grep foodbox-app | cut -d " " -f1) ]; then \
-                    echo $(docker rm -f foodbox-app); \
-                    echo "---------------- successfully removed ecom-webservice ----------------"
-                    else \
-                echo OK; \
-                fi;);
-        docker container run --restart always --name foodbox-service-rest -p 4200:4200 -d foodbox-app
-        '''
+        stage('Docker Deploy') {
+            steps {
+                echo '----------------- This is a docker deploment phase ----------'
+                sh '''
+                 (if  [ $(docker ps -a | grep foodbox-app | cut -d " " -f1) ]; then \
+                        echo $(docker rm -f foodbox-app); \
+                        echo "---------------- successfully removed ecom-webservice ----------------"
+                     else \
+                    echo OK; \
+                 fi;);
+            docker container run --restart always --name foodbox-app -p 4200:4200 -d foodbox-app
+            '''
+            }
         }
     }
 }
