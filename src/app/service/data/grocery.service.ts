@@ -7,7 +7,7 @@ import { catchError, map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class GroceryService {
-  baseurl = 'http://localhost:8100/grocery';
+  baseurl = 'http://54.235.238.98:8081/grocery';
 
   constructor(private http:HttpClient) { }
 
